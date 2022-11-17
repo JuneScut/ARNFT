@@ -1,0 +1,65 @@
+.main {
+    padding: 1.2rem;
+    position: relative;
+}
+.title {
+    text-align: center;
+}
+.nft-model {
+    width: 100%;
+    position: relative;
+}
+.nft-model img {
+    width: 70%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+.submit-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.submit {
+	position: relative;
+	display: inline-block;
+	padding: 1em 2em;
+	text-decoration: none;
+	text-align: center;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+}
+.submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    border-radius: 4px;
+    transition: box-shadow .5s ease, transform .2s ease; 
+    will-change: transform;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    transform:
+        translateY(var(--ty, 0))
+        rotateX(var(--rx, 0))
+        rotateY(var(--ry, 0))
+        translateZ(var(--tz, -12px));
+}
+.submit:hover::before {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .3);
+}
+.submit::after {
+    position: relative;
+    display: inline-block;
+    content: attr(data-title);
+    transition: transform .2s ease; 
+    font-weight: bold;
+    letter-spacing: .01em;
+    will-change: transform;
+    transform:
+        translateY(var(--ty, 0))
+        rotateX(var(--rx, 0))
+        rotateY(var(--ry, 0));
+}
