@@ -12,3 +12,8 @@ shells for contract test and deploy
 npx hardhat test
 npx hardhat run scripts/deploy.ts --network etherdata
 ```
+
+# Reference
+
+- [documents](https://docs.openzeppelin.com/contracts/4.x/api/token/erc721#IERC721Enumerable)
+- [如何创建和使用 ERC721 代币](https://learnblockchain.cn/article/2077#3.%20%E6%9E%9A%E4%B8%BE%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89)
