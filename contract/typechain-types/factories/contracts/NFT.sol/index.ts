@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ARNFT__factory } from "./ARNFT__factory";
-export { MyNFT__factory } from "./MyNFT__factory";

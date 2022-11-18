@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ARNFT } from "./ARNFT";
-export type { MyNFT } from "./MyNFT";
