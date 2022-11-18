@@ -5,7 +5,7 @@
 Plans:
 - [ ] 限制 Mint 数量
 - [ ] NFT 价值设定
-- [ ] 如何获取所有的 NFT
+- [x] 如何获取所有的 NFT
 - [x] 如何获取某个用户在本应用 Mint 到的 NFT
 
 ## How to start?
