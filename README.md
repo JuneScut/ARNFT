@@ -13,12 +13,16 @@ run `npx hardhat test` under the contract folder. If you occur some start proble
 # FrontEnd
 1. Use React+typescript
 2. Mobile Web
+3. use [vercel](https://vercel.com/) to deploy. It is very easy!
 
 Plans:
 - [ ] 增加 Mint 过程交互
 - [ ] 查看所有已经 Mint 到的 NFT
 - [ ] 获取当前地点 ID
 - [ ] 查看当前地点所有隐藏的 NFT
+
+## Glance
+[website](https://arnft-seven.vercel.app/) 
 
 # BackEnd
 1. Use Koa framework to wirte web API
