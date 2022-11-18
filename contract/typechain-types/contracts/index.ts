@@ -3,3 +3,5 @@
 /* eslint-disable */
 import type * as nftSol from "./NFT.sol";
 export type { nftSol };
+export type { ARNFT } from "./ARNFT";
+export type { ARNftMarket } from "./ARNftMarket";

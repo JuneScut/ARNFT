@@ -36,11 +36,11 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 // }
 
 
-contract ARNFT is ERC721Enumerable {
+contract MyNFT is ERC721Enumerable {
     string[] public data;
     mapping(uint => bool) _itemExists;
 
-    constructor() ERC721("ARNFT", "NFT") {}
+    constructor() ERC721("MyNFT", "NFT") {}
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), "Token does not exist.");

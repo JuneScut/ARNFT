@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as nftSol from "./NFT.sol";
+export { ARNFT__factory } from "./ARNFT__factory";
+export { ARNftMarket__factory } from "./ARNftMarket__factory";

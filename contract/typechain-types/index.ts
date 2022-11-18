@@ -24,5 +24,9 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
-export type { ARNFT } from "./contracts/NFT.sol/ARNFT";
-export { ARNFT__factory } from "./factories/contracts/NFT.sol/ARNFT__factory";
+export type { ARNFT } from "./contracts/ARNFT";
+export { ARNFT__factory } from "./factories/contracts/ARNFT__factory";
+export type { ARNftMarket } from "./contracts/ARNftMarket";
+export { ARNftMarket__factory } from "./factories/contracts/ARNftMarket__factory";
+export type { MyNFT } from "./contracts/NFT.sol/MyNFT";
+export { MyNFT__factory } from "./factories/contracts/NFT.sol/MyNFT__factory";

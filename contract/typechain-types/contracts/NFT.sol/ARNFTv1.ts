@@ -27,7 +27,7 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
-export interface MyNFTInterface extends utils.Interface {
+export interface ARNFTv1Interface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "awardItem(string)": FunctionFragment;
@@ -247,12 +247,12 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface MyNFT extends BaseContract {
+export interface ARNFTv1 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MyNFTInterface;
+  interface: ARNFTv1Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
