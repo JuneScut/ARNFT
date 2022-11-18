@@ -1,0 +1,16 @@
+{
+  "models": [
+    {
+      "name": "Nike Pegasus",
+      "description": "Let the Nike Air Zoom Pegasus 39 PRM help you ascend to new heights, whether you're training or jogging, with its intuitive design. This version has a brightly colored exterior that announces your presence on the road. Time to fly.",
+      "url": "https://developer.apple.com/augmented-reality/quick-look/models/nike-pegasus/nike-pegasus_2x.png",
+      "ar": "https://developer.apple.com/ar/photogrammetry/PegasusTrail.usdz"
+    },
+    {
+      "name": "cake",
+      "description": "dilicious",
+      "url": "https://developer.apple.com/augmented-reality/quick-look/models/meringue/meringue_2x.png",
+      "ar": "https://developer.apple.com/ar/photogrammetry/LemonMeringuePie.usdz"
+    }
+  ]
+}

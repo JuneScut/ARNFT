@@ -9,10 +9,6 @@ const routes_1 = __importDefault(require("./routes"));
 const app = new koa_1.default();
 // 解析 request body:
 app.use((0, koa_body_1.default)());
-// app.use(async (ctx: Koa.DefaultContext) => {
-//   // console.log(ctx.request.body);
-//   ctx.body = "Hello, Ellila!";
-// });
 // 路由
 app.use(routes_1.default.routes()).use(routes_1.default.allowedMethods());
 const port = 9000;

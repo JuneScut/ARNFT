@@ -19,7 +19,7 @@ describe("test NFTMarket", function () {
     let listingPrice = await market.getListingPrice();
     listingPrice = listingPrice.toString();
     // change price to ether
-    const auctionPrice = ethers.utils.parseUnits("100", "ether"); // TODO: confuse
+    const auctionPrice = ethers.utils.parseUnits("100", "ether");
     // create two NFTs
     await nft.createToken(JSON.stringify(models[0]));
     await nft.createToken(JSON.stringify(models[1]));
