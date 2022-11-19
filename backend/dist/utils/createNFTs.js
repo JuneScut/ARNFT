@@ -52,17 +52,34 @@ const createNFTs = () => __awaiter(void 0, void 0, void 0, function* () {
     const auctionPrice = ethers_1.ethers.utils.parseUnits("100", "ether");
     const models = modelJson.models;
     // create NFTs
-    yield nftContract.connect(signer).createToken(JSON.stringify(models[0]));
-    yield nftContract.connect(signer).createToken(JSON.stringify(models[1]));
+    const tx1 = yield nftContract
+        .connect(signer)
+        .createToken(JSON.stringify(models[0]));
+    const tx2 = yield nftContract
+        .connect(signer)
+        .createToken(JSON.stringify(models[1]));
+    let tokenOwner = yield nftContract.ownerOf(1);
+    console.log("tokenOwner=", tokenOwner);
+    // 传入 tokenId, 获取对应链上存储的元数据
+    let data = yield nftContract.tokenURI(1);
+    console.log(data);
+    // 这个函数可以获取某地址当前拥有的该 NFT 数量
+    let balance = yield nftContract.balanceOf(signer.address);
+    console.log(`balance=${balance}`);
     // put them into market
     yield marketContract.createMarketItem(nftContract.address, 1, auctionPrice, {
         value: listingPrice,
+        gasLimit: 3e4,
     });
+    console.log(5555, "put1");
     yield marketContract.createMarketItem(nftContract.address, 2, auctionPrice, {
         value: listingPrice,
+        gasLimit: 3e4,
     });
+    console.log(6666, "put2");
     // fetch those unsold NFTs
     let arrayItems = yield marketContract.fetchMarketItems();
+    console.log(7777, arrayItems);
     const mapFunc = (i) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(i.tokenId);
         const tokenUri = yield nftContract.tokenURI(i.tokenId);
