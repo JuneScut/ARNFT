@@ -15,8 +15,7 @@ export default {
     ctx.body = `balance=${ethers.utils.formatEther(balance)}`;
   },
   test: async (ctx: Context) => {
-    // createNFTs();
-    // testMyNFT();
+    await createNFTs();
     getNFTs();
     ctx.body = "test";
   },

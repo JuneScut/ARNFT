@@ -37,7 +37,11 @@ const constant_1 = require("../constant");
 const arNFTJson = __importStar(require("../assets/ARNFT.json"));
 const marketJson = __importStar(require("../assets/ARNftMarket.json"));
 const getNFTs = () => __awaiter(void 0, void 0, void 0, function* () {
-    const provider = new ethers_1.ethers.providers.JsonRpcProvider("https://rpc.debugchain.net");
+    let network = {
+        chainId: 8348,
+        name: "Etherdata",
+    };
+    const provider = new ethers_1.ethers.providers.JsonRpcProvider("https://rpc.debugchain.net", network);
     const signer = new ethers_1.ethers.Wallet(constant_1.ACCOUNT.PK, provider);
     const buyer = new ethers_1.ethers.Wallet(constant_1.BUYER.PK, provider);
     const marketAbi = marketJson.abi;
@@ -46,7 +50,9 @@ const getNFTs = () => __awaiter(void 0, void 0, void 0, function* () {
     const nftContract = new ethers_1.ethers.Contract(constant_1.ContractAddress.ARNFT, nftAbi, signer);
     let listingPrice = yield marketContract.getListingPrice();
     listingPrice = listingPrice.toString();
-    const auctionPrice = ethers_1.ethers.utils.parseUnits("100", "ether");
+    const auctionPrice = ethers_1.ethers.utils.parseUnits("1", "ether");
+    const balance = yield provider.getBalance(buyer.address);
+    console.log("balance:", ethers_1.ethers.utils.formatEther(balance));
     // TODO: try catch, fund is insufficient
     const tx = yield marketContract
         .connect(buyer)
@@ -55,25 +61,19 @@ const getNFTs = () => __awaiter(void 0, void 0, void 0, function* () {
         gasLimit: 3e4,
     });
     console.log(tx);
-    // const myNFTs = await marketContract.connect(buyer).fetchMyNFTs();
-    // const myNFTItems = await Promise.all(
-    //   myNFTs.filter((nft: any) => nft.tokenId.toNumber() > 0).map(mapFunc)
-    // );
-    // console.log("My NFT:", myNFTs);
-    // let arrayItems = await marketContract.fetchSomething();
-    // console.log("arrayItems", arrayItems);
-    // const mapFunc = async (i: any) => {
-    //   console.log(i.tokenId);
-    //   const tokenUri = await nftContract.tokenURI(i.tokenId);
-    //   return {
-    //     price: i.price.toString(),
-    //     tokenId: i.tokenId.toString(),
-    //     seller: i.seller,
-    //     owner: i.owner,
-    //     tokenUri,
-    //   };
-    // };
-    // arrayItems = await Promise.all(arrayItems.map(mapFunc));
-    // console.log("unsold NFTs", arrayItems);
+    const myNFTs = yield marketContract.connect(buyer).fetchMyNFTs();
+    const mapFunc = (i) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(i.tokenId);
+        const tokenUri = yield nftContract.tokenURI(i.tokenId);
+        return {
+            price: i.price.toString(),
+            tokenId: i.tokenId.toString(),
+            seller: i.seller,
+            owner: i.owner,
+            tokenUri,
+        };
+    });
+    const myNFTItems = yield Promise.all(myNFTs.filter((nft) => nft.tokenId.toNumber() > 0).map(mapFunc));
+    console.log("My NFT:", myNFTItems);
 });
 exports.default = getNFTs;

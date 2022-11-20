@@ -32,7 +32,7 @@ const createNFTs = async () => {
   // create NFTs, from: signer.address --> NFTContract.address
   await nftContract.connect(signer).createToken(JSON.stringify(models[0]));
 
-  // 这个函数可以获取某地址当前拥有的该 NFT 数量
+  // 获取某地址当前拥有的该 NFT 数量
   let balance = await nftContract.balanceOf(signer.address);
   console.log(`balance=${balance}`);
 
@@ -56,21 +56,21 @@ const createNFTs = async () => {
   console.log("createMarketItem,", tx);
 
   // fetch those unsold NFTs
-  // let arrayItems = await marketContract.fetchSomething();
-  // console.log("arrayItems", arrayItems);
-  // const mapFunc = async (i: any) => {
-  //   console.log(i.tokenId);
-  //   const tokenUri = await nftContract.tokenURI(i.tokenId);
-  //   return {
-  //     price: i.price.toString(),
-  //     tokenId: i.tokenId.toString(),
-  //     seller: i.seller,
-  //     owner: i.owner,
-  //     tokenUri,
-  //   };
-  // };
-  // arrayItems = await Promise.all(arrayItems.map(mapFunc));
-  // console.log("unsold NFTs", arrayItems);
+  let arrayItems = await marketContract.fetchMarketItems();
+  console.log("arrayItems", arrayItems);
+  const mapFunc = async (i: any) => {
+    console.log(i.tokenId);
+    const tokenUri = await nftContract.tokenURI(i.tokenId);
+    return {
+      price: i.price.toString(),
+      tokenId: i.tokenId.toString(),
+      seller: i.seller,
+      owner: i.owner,
+      tokenUri,
+    };
+  };
+  arrayItems = await Promise.all(arrayItems.map(mapFunc));
+  console.log("unsold NFTs", arrayItems);
 };
 
 export default createNFTs;

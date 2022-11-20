@@ -70,8 +70,5 @@ describe("test NFTMarket", function () {
         .map(mapFunc)
     );
     console.log(allCreatedNFTsItems);
-
-    const sth = await market.fetchSomething()
-    console.log("something=", sth)
   });
 });
