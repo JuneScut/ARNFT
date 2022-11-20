@@ -479,8 +479,8 @@
       ]
     },
     "/Users/ellilachen/BDT/5017/ARNFT/contract/contracts/ARNftMarket.sol": {
-      "lastModificationDate": 1668931347941,
-      "contentHash": "aa1a5a62aae85f9151131ffd9cfde92c",
+      "lastModificationDate": 1668935244152,
+      "contentHash": "1e4400755a45e83e2fb43cf04828423a",
       "sourceName": "contracts/ARNftMarket.sol",
       "solcConfig": {
         "version": "0.8.17",
