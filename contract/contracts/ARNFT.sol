@@ -9,7 +9,7 @@ contract ARNFT is ERC721URIStorage {
     Counters.Counter private _tokenIds;
     address contractAddress;
 
-    constructor(address marketplaceAddress) ERC721("ARNFT", "NFT") {
+    constructor(address marketplaceAddress) ERC721("ARNFT", "ARNFT") {
         contractAddress = marketplaceAddress;
     }
 

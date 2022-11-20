@@ -10,7 +10,7 @@ contract ARNftMarket is ReentrancyGuard {
     Counters.Counter private _itemIds; 
     Counters.Counter private _itemsSold;
     address payable owner;
-    uint256 listingPrice = 0.025 ether;
+    uint256 listingPrice = 0.0 ether;
     
     constructor() {
         owner = payable(msg.sender);
@@ -47,7 +47,7 @@ contract ARNftMarket is ReentrancyGuard {
         uint256 tokenId,
         uint256 price
     ) public payable nonReentrant {
-        require(price > 0, "Price must be at least 1 wei"); // 防止免费交易
+        // require(price > 0, "Price must be at least 1 wei"); // 防止免费交易
         require(msg.value == listingPrice, "Price must be equal to listing price"); // 交易价格必须和NFT单价相等
         _itemIds.increment();
         uint256 itemId = _itemIds.current();
@@ -88,6 +88,22 @@ contract ARNftMarket is ReentrancyGuard {
         console.log("tokenId:",tokenId);
         payable(owner).transfer(listingPrice);
     }
+    // fetch something
+    function fetchSomething() public view returns (MarketItem[] memory) {
+        uint itemCount = _itemIds.current();
+        uint currentIndex = 0;
+        MarketItem[] memory items = new MarketItem[](itemCount);
+        for (uint i = 0; i < itemCount; i++) {
+            if (idToMarketItem[i + 1].owner == address(0)) {  
+                uint currentId =  i + 1;
+                MarketItem storage currentItem = idToMarketItem[currentId]; 
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            } 
+        }
+        return items;
+    }
+
     // fetch all unsold nfts
     function fetchMarketItems() public view returns (MarketItem[] memory) {
         uint itemCount = _itemIds.current();

@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ethers_1 = require("ethers");
 const constant_1 = require("../constant");
-const createNFTs_1 = __importDefault(require("../utils/createNFTs"));
+const getNFTs_1 = __importDefault(require("../utils/getNFTs"));
 const provider = new ethers_1.ethers.providers.JsonRpcProvider("https://rpc.debugchain.net");
 exports.default = {
     getBalance: (ctx) => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,8 +22,9 @@ exports.default = {
         ctx.body = `balance=${ethers_1.ethers.utils.formatEther(balance)}`;
     }),
     test: (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-        (0, createNFTs_1.default)();
+        // createNFTs();
         // testMyNFT();
+        (0, getNFTs_1.default)();
         ctx.body = "test";
     }),
 };

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { ACCOUNT, ContractAddress, CREATOR } from "../constant";
+import { ACCOUNT, ContractAddress } from "../constant";
 import * as marketJson from "../assets/MyNFT.json";
 import * as modelJson from "../assets/ar.json";
 

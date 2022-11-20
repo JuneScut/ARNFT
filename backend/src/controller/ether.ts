@@ -2,6 +2,7 @@ import { Contract, ethers } from "ethers";
 import { Context } from "koa";
 import { ACCOUNT, ContractAddress } from "../constant";
 import createNFTs from "../utils/createNFTs";
+import getNFTs from "../utils/getNFTs";
 import testMyNFT from "../utils/testMyNFT";
 
 const provider = new ethers.providers.JsonRpcProvider(
@@ -14,8 +15,9 @@ export default {
     ctx.body = `balance=${ethers.utils.formatEther(balance)}`;
   },
   test: async (ctx: Context) => {
-    createNFTs();
+    // createNFTs();
     // testMyNFT();
+    getNFTs();
     ctx.body = "test";
   },
 };

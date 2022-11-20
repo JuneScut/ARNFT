@@ -64,6 +64,7 @@ export interface ARNftMarketInterface extends utils.Interface {
     "fetchItemsCreated()": FunctionFragment;
     "fetchMarketItems()": FunctionFragment;
     "fetchMyNFTs()": FunctionFragment;
+    "fetchSomething()": FunctionFragment;
     "getListingPrice()": FunctionFragment;
   };
 
@@ -74,6 +75,7 @@ export interface ARNftMarketInterface extends utils.Interface {
       | "fetchItemsCreated"
       | "fetchMarketItems"
       | "fetchMyNFTs"
+      | "fetchSomething"
       | "getListingPrice"
   ): FunctionFragment;
 
@@ -102,6 +104,10 @@ export interface ARNftMarketInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "fetchSomething",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getListingPrice",
     values?: undefined
   ): string;
@@ -124,6 +130,10 @@ export interface ARNftMarketInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "fetchMyNFTs",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "fetchSomething",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -207,6 +217,10 @@ export interface ARNftMarket extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[ARNftMarket.MarketItemStructOutput[]]>;
 
+    fetchSomething(
+      overrides?: CallOverrides
+    ): Promise<[ARNftMarket.MarketItemStructOutput[]]>;
+
     getListingPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
@@ -235,6 +249,10 @@ export interface ARNftMarket extends BaseContract {
     overrides?: CallOverrides
   ): Promise<ARNftMarket.MarketItemStructOutput[]>;
 
+  fetchSomething(
+    overrides?: CallOverrides
+  ): Promise<ARNftMarket.MarketItemStructOutput[]>;
+
   getListingPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
@@ -260,6 +278,10 @@ export interface ARNftMarket extends BaseContract {
     ): Promise<ARNftMarket.MarketItemStructOutput[]>;
 
     fetchMyNFTs(
+      overrides?: CallOverrides
+    ): Promise<ARNftMarket.MarketItemStructOutput[]>;
+
+    fetchSomething(
       overrides?: CallOverrides
     ): Promise<ARNftMarket.MarketItemStructOutput[]>;
 
@@ -307,6 +329,8 @@ export interface ARNftMarket extends BaseContract {
 
     fetchMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
 
+    fetchSomething(overrides?: CallOverrides): Promise<BigNumber>;
+
     getListingPrice(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
@@ -329,6 +353,8 @@ export interface ARNftMarket extends BaseContract {
     fetchMarketItems(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     fetchMyNFTs(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    fetchSomething(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getListingPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

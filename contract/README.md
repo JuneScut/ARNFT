@@ -2,9 +2,9 @@
 
 MyNFT Contract deployed to: 0x4F433E1e965Cb122f902645D36Ea21A504c9cf02
 
-ARNftMarket Contract deployed to: 0xc334836027f23d24C301d5E0F84C9A1fE33E7F7C
+ARNftMarket Contract deployed to: 0x24117A7D50b57B175199ef02C06a83738A70A215
 
-NFT Contract deployed to: 0xDabf9287dbBceE506adAb412C40cAB7BD7Fee4De
+NFT Contract deployed to: 0xB0468146b7151c14aC4eB37Dd49e7773BB36AD2C
 
 
 shells for contract test and deploy

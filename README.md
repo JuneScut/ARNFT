@@ -41,6 +41,10 @@ This project use [vercel](https://vercel.com/) to deploy. It is very easy!
 - [ ] Sql 设计：需要存什么用户信息
 - [ ] 用户身份处理
 - [ ] 和 ethereum 交互，将功能封装成接口
+  - [ ] 将 NFT 发布到 Market, Market 查不到 NFT
+  - [ ] 购买 NFT
+  - [ ] 查询已购买
+  - [ ] 查询未销售
 - [ ] 地点 ID 和 NFT 配置
 
 
