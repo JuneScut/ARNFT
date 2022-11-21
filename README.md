@@ -24,7 +24,7 @@ run `npx hardhat test` under the contract folder. If you occur some start proble
 ##  How to start?
 ```
 npm install # for the first time
-npm start
+npm dev
 ```
 
 ## How to deploy?
@@ -56,3 +56,21 @@ npm run start # or npm run watch(which can update when your code changes)
 ```
 
 if start sucessfully, open [localhost](http://localhost:9000/ether/test) on your browser for a simple test.
+
+# Server
+
+## shell
+```
+// 本地开发调试 
+cd server/functions
+npm run serve
+
+// 部署
+firebase deploy
+```
+
+## API 调用示例
+
+local：http://127.0.0.1:5001/test-35968/asia-east2/getBalance?address=0x3d71519280e40f6ec003645c86761EF479040002
+
+server: https://asia-east2-test-35968.cloudfunctions.net/getBalance?address=0x3d71519280e40f6ec003645c86761EF479040002

@@ -1,0 +1,1 @@
+helloworld: https://asia-east2-test-35968.cloudfunctions.net/helloWorld
