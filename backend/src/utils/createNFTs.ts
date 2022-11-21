@@ -1,30 +1,13 @@
 import { ethers } from "ethers";
-import { ACCOUNT, ContractAddress } from "../constant";
-import * as arNFTJson from "../assets/ARNFT.json";
-import * as marketJson from "../assets/ARNftMarket.json";
 import * as modelJson from "../assets/ar.json";
+import { getMarketContract, getNFTContract, getRoles } from "./tool";
 
 const createNFTs = async () => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "https://rpc.debugchain.net"
-  );
-  const signer = new ethers.Wallet(ACCOUNT.PK, provider);
+  const { signer } = getRoles();
   // market
-  const marketAbi = marketJson.abi;
-  const marketContract = new ethers.Contract(
-    ContractAddress.Market,
-    marketAbi,
-    signer
-  );
-  const marketAddress = marketContract.address;
-  console.log("marketAddress=", marketAddress);
+  const marketContract = getMarketContract(signer);
   // nft
-  const nftAbi = arNFTJson.abi;
-  const nftContract = new ethers.Contract(
-    ContractAddress.ARNFT,
-    nftAbi,
-    signer
-  );
+  const nftContract = getNFTContract(signer);
   let listingPrice = await marketContract.getListingPrice();
   listingPrice = listingPrice.toString();
   const auctionPrice = ethers.utils.parseUnits("100", "ether");
@@ -33,20 +16,20 @@ const createNFTs = async () => {
   await nftContract.connect(signer).createToken(JSON.stringify(models[0]));
 
   // 获取某地址当前拥有的该 NFT 数量
-  let balance = await nftContract.balanceOf(signer.address);
-  console.log(`balance=${balance}`);
+  let count = await nftContract.balanceOf(signer.address);
+  console.log(`creator, count=${count}`);
 
-  let tokenOwner = await nftContract.ownerOf(1);
+  let tokenOwner = await nftContract.ownerOf(count);
   console.log("tokenOwner=", tokenOwner);
 
   // 传入 tokenId, 获取对应链上存储的元数据
-  let data = await nftContract.tokenURI(1);
+  let data = await nftContract.tokenURI(count);
   console.log(data);
 
   // TODO: put them into market
   const tx = await marketContract.createMarketItem(
     nftContract.address,
-    1,
+    count,
     auctionPrice,
     {
       value: listingPrice,

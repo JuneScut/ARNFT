@@ -33,21 +33,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ethers_1 = require("ethers");
-const constant_1 = require("../constant");
-const arNFTJson = __importStar(require("../assets/ARNFT.json"));
-const marketJson = __importStar(require("../assets/ARNftMarket.json"));
 const modelJson = __importStar(require("../assets/ar.json"));
+const tool_1 = require("./tool");
 const createNFTs = () => __awaiter(void 0, void 0, void 0, function* () {
-    const provider = new ethers_1.ethers.providers.JsonRpcProvider("https://rpc.debugchain.net");
-    const signer = new ethers_1.ethers.Wallet(constant_1.ACCOUNT.PK, provider);
+    const { signer } = (0, tool_1.getRoles)();
     // market
-    const marketAbi = marketJson.abi;
-    const marketContract = new ethers_1.ethers.Contract(constant_1.ContractAddress.Market, marketAbi, signer);
-    const marketAddress = marketContract.address;
-    console.log("marketAddress=", marketAddress);
+    const marketContract = (0, tool_1.getMarketContract)(signer);
     // nft
-    const nftAbi = arNFTJson.abi;
-    const nftContract = new ethers_1.ethers.Contract(constant_1.ContractAddress.ARNFT, nftAbi, signer);
+    const nftContract = (0, tool_1.getNFTContract)(signer);
     let listingPrice = yield marketContract.getListingPrice();
     listingPrice = listingPrice.toString();
     const auctionPrice = ethers_1.ethers.utils.parseUnits("100", "ether");
@@ -55,15 +48,15 @@ const createNFTs = () => __awaiter(void 0, void 0, void 0, function* () {
     // create NFTs, from: signer.address --> NFTContract.address
     yield nftContract.connect(signer).createToken(JSON.stringify(models[0]));
     // 获取某地址当前拥有的该 NFT 数量
-    let balance = yield nftContract.balanceOf(signer.address);
-    console.log(`balance=${balance}`);
-    let tokenOwner = yield nftContract.ownerOf(1);
+    let count = yield nftContract.balanceOf(signer.address);
+    console.log(`creator, count=${count}`);
+    let tokenOwner = yield nftContract.ownerOf(count);
     console.log("tokenOwner=", tokenOwner);
     // 传入 tokenId, 获取对应链上存储的元数据
-    let data = yield nftContract.tokenURI(1);
+    let data = yield nftContract.tokenURI(count);
     console.log(data);
     // TODO: put them into market
-    const tx = yield marketContract.createMarketItem(nftContract.address, 1, auctionPrice, {
+    const tx = yield marketContract.createMarketItem(nftContract.address, count, auctionPrice, {
         value: listingPrice,
         gasLimit: 3e4, // fix gas estimation
     });
