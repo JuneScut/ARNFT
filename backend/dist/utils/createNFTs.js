@@ -55,12 +55,14 @@ const createNFTs = () => __awaiter(void 0, void 0, void 0, function* () {
     // 传入 tokenId, 获取对应链上存储的元数据
     let data = yield nftContract.tokenURI(count);
     console.log(data);
+    console.log("listingPrice=", listingPrice);
     // TODO: put them into market
     const tx = yield marketContract.createMarketItem(nftContract.address, count, auctionPrice, {
         value: listingPrice,
         gasLimit: 3e4, // fix gas estimation
     });
     console.log("createMarketItem,", tx);
+    yield tx.wait();
     // fetch those unsold NFTs
     let arrayItems = yield marketContract.fetchMarketItems();
     console.log("arrayItems", arrayItems);

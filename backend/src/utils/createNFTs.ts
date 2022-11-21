@@ -26,6 +26,8 @@ const createNFTs = async () => {
   let data = await nftContract.tokenURI(count);
   console.log(data);
 
+  console.log("listingPrice=", listingPrice);
+
   // TODO: put them into market
   const tx = await marketContract.createMarketItem(
     nftContract.address,
@@ -37,6 +39,7 @@ const createNFTs = async () => {
     }
   );
   console.log("createMarketItem,", tx);
+  await tx.wait();
 
   // fetch those unsold NFTs
   let arrayItems = await marketContract.fetchMarketItems();
