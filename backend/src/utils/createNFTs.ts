@@ -13,7 +13,10 @@ const createNFTs = async () => {
   const auctionPrice = ethers.utils.parseUnits("100", "ether");
   const models = modelJson.models;
   // create NFTs, from: signer.address --> NFTContract.address
-  await nftContract.connect(signer).createToken(JSON.stringify(models[0]));
+  const tokenTx = await nftContract
+    .connect(signer)
+    .createToken(JSON.stringify(models[0]));
+  await tokenTx.wait();
 
   // 获取某地址当前拥有的该 NFT 数量
   let count = await nftContract.balanceOf(signer.address);
@@ -32,10 +35,10 @@ const createNFTs = async () => {
   const tx = await marketContract.createMarketItem(
     nftContract.address,
     count,
-    auctionPrice,
+    20,
     {
       value: listingPrice,
-      gasLimit: 3e4, // fix gas estimation
+      gasLimit: 3000004, // fix gas estimation
     }
   );
   console.log("createMarketItem,", tx);
