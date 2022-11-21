@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState, useCallback } from "react";
-import "./style.css";
+import "../styles/index.css";
 
 function App() {
   // NFT info
