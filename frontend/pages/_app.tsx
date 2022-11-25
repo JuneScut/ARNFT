@@ -12,11 +12,9 @@ function App() {
   const [ar, setAr] = useState<string>("");
 
   const router = useRouter();
+  const { id } = router.query;
 
   const getData = () => {
-    const { id = 14 } = router.query;
-    console.log(router.query);
-    console.log({ id });
     if (id) {
       getNFTData(id.toString()).then((res: string) => {
         if (res) {
@@ -33,7 +31,7 @@ function App() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [id]);
 
   const onClick = useCallback(async () => {}, []);
 
