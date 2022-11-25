@@ -16,10 +16,9 @@ run `npx hardhat test` under the contract folder. If you occur some start proble
 3. use [vercel](https://vercel.com/) to deploy. It is very easy!
 
 ## Plans:
-- [ ] 增加 Mint 过程交互
+- [x] 增加 Claim 过程交互
 - [ ] 查看所有已经 Mint 到的 NFT
-- [ ] 获取当前地点 ID
-- [ ] 查看当前地点所有隐藏的 NFT
+- [ ] 查看当前所有隐藏的 NFT
 
 ##  How to start?
 ```
@@ -37,15 +36,6 @@ This project use [vercel](https://vercel.com/) to deploy. It is very easy!
 1. Use Koa framework to wirte web API
 2. Use EtherJS to interact with Ethereum
 
-## Plans:
-- [ ] Sql 设计：需要存什么用户信息
-- [ ] 用户身份处理
-- [ ] 和 ethereum 交互，将功能封装成接口
-  - [ ] 将 NFT 发布到 Market, Market 查不到 NFT
-  - [ ] 购买 NFT
-  - [ ] 查询已购买
-  - [ ] 查询未销售
-- [ ] 地点 ID 和 NFT 配置
 
 
 ## How to start?
@@ -74,3 +64,12 @@ firebase deploy
 local：http://127.0.0.1:5001/test-35968/asia-east2/getBalance?address=0x3d71519280e40f6ec003645c86761EF479040002
 
 server: https://asia-east2-test-35968.cloudfunctions.net/getBalance?address=0x3d71519280e40f6ec003645c86761EF479040002
+
+## Plans:
+- [ ] 数据存储
+- [ ] 用户身份处理
+- [ ] 和 ethereum 交互，将功能封装成接口
+  - [x] 将 NFT 发布到 Market
+  - [ ] 购买 NFT 报错！
+  - [x] 查询已购买
+  - [x] 查询未销售

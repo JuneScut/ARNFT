@@ -1,7 +1,12 @@
 import { BigNumber, ethers } from "ethers";
 import * as functions from "firebase-functions";
 import { RETURN_CODE } from "./utils/constant";
-import { getMarketContract, getNFTContract, getRoles } from "./utils/tool";
+import {
+  getMarketContract,
+  getNFTContract,
+  getRoles,
+  getUnsoldNFTs,
+} from "./utils/tool";
 // import * as admin from "firebase-admin";
 
 import * as cross from "cors";
@@ -139,27 +144,35 @@ export const fetchMarketItems = functions
   .region("asia-east2")
   .https.onRequest(async (request, response) => {
     cors(request, response, async () => {
-      const { signer } = getRoles();
-      const nftContract = getNFTContract(signer);
-      const marketContract = getMarketContract(signer);
-
-      let arrayItems = await marketContract.fetchMarketItems();
-      const nfts = await Promise.all(
-        arrayItems.map(async (i: any) => {
-          const tokenUri = await nftContract.tokenURI(i.tokenId);
-          return {
-            price: i.price.toString(),
-            tokenId: i.tokenId.toString(),
-            seller: i.seller,
-            owner: i.owner,
-            tokenUri,
-          };
-        })
-      );
+      const nfts = await getUnsoldNFTs();
       response.send({
         code: RETURN_CODE.SUCCESS,
         nfts,
       });
+    });
+  });
+
+// for frontend display
+export const getNFTMarketData = functions
+  .region("asia-east2")
+  .https.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+      const { tokenId } = request.query;
+      if (!tokenId) {
+        response.send({
+          code: RETURN_CODE.ERROR_PARAMS,
+        });
+      } else {
+        const nfts = await getUnsoldNFTs();
+        const item = nfts.find((nft) => nft.tokenId == tokenId.toString());
+        if (item) {
+          item.price = ethers.utils.formatEther(item.price).toString();
+        }
+        response.send({
+          code: RETURN_CODE.SUCCESS,
+          data: item,
+        });
+      }
     });
   });
 
@@ -174,28 +187,28 @@ export const buyNFT = functions
           code: RETURN_CODE.ERROR_PARAMS,
         });
       } else {
-        // try {
-        const { buyer } = getRoles();
-        const marketContract = getMarketContract(buyer);
-        const nftContract = getNFTContract(buyer);
-        const auctionPrice = ethers.utils.parseUnits(etherValue, "ether");
-        console.log("auctionPrice=", auctionPrice.toString());
-        const tx = await marketContract
-          .connect(buyer)
-          .createMarketSale(nftContract.address, tokenId, {
-            value: auctionPrice,
-            gasLimit: 3000004,
+        try {
+          const { buyer } = getRoles();
+          const marketContract = getMarketContract(buyer);
+          const nftContract = getNFTContract(buyer);
+          const auctionPrice = ethers.utils.parseUnits(etherValue, "ether");
+          console.log("auctionPrice=", auctionPrice.toString());
+          const tx = await marketContract
+            .connect(buyer)
+            .createMarketSale(nftContract.address, tokenId, {
+              value: auctionPrice,
+              gasLimit: 3000004,
+            });
+          await tx.wait();
+          response.send({
+            code: RETURN_CODE.SUCCESS,
           });
-        await tx.wait();
-        response.send({
-          code: RETURN_CODE.SUCCESS,
-        });
-        // } catch (e: any) {
-        //   response.send({
-        //     code: RETURN_CODE.ERROR_ETHER,
-        //     error: e.toString(),
-        //   });
-        // }
+        } catch (e: any) {
+          response.send({
+            code: RETURN_CODE.ERROR_ETHER,
+            error: e.toString(),
+          });
+        }
       }
     });
   });

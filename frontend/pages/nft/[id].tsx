@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/router";
-import { getNFTData } from "../../libs/server";
+import { buyNFT, getNFTData, getNFTMarketData } from "../../libs/server";
+import { Dialog, DotLoading } from "antd-mobile";
 
 const Loading = () => {
   return (
@@ -19,26 +20,30 @@ const Loading = () => {
 
 function NFT() {
   const [loading, setLoading] = useState<boolean>(true);
+  const [tradingLoading, setTradingLoading] = useState<boolean>(false);
   // NFT info
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [url, setUrl] = useState<string>("");
   const [ar, setAr] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
 
   const router = useRouter();
   const { id } = router.query;
 
   const getData = () => {
     if (id) {
-      getNFTData(id.toString()).then((res: string) => {
+      getNFTMarketData(id.toString()).then((res) => {
         if (res) {
-          const data = JSON.parse(res);
+          const { price, tokenUri } = res;
+          const data = JSON.parse(tokenUri);
           const { name, description, url, ar } = data;
           setName(name);
           setDescription(description);
           setUrl(url);
           setAr(ar);
           setLoading(false);
+          setPrice(price);
         } else {
           router.push("/404");
         }
@@ -50,7 +55,27 @@ function NFT() {
     getData();
   }, [id]);
 
-  const onClick = useCallback(async () => {}, []);
+  const claimNFT = useCallback(async () => {
+    Dialog.confirm({
+      title: "Comfirmation",
+      content: `Are you sure to consume ${price} ether to claim this NFT?`,
+      cancelText: "Cancel",
+      confirmText: "Confirm",
+      onConfirm: async () => {
+        if (id) {
+          setTradingLoading(true);
+          buyNFT(id.toString(), price).then(
+            (res) => {
+              setTradingLoading(false);
+            },
+            (err) => {
+              setTradingLoading(false);
+            }
+          );
+        }
+      },
+    });
+  }, [id, price]);
 
   return loading ? (
     <Loading />
@@ -64,7 +89,13 @@ function NFT() {
         </a>
       </div>
       <div className="submit-btn">
-        <a onClick={onClick} className="submit" data-title="Claim"></a>
+        <a onClick={claimNFT} className="submit">
+          {tradingLoading ? (
+            <DotLoading className="submit-content" color="white" />
+          ) : (
+            <div className="submit-content">Claim</div>
+          )}
+        </a>
       </div>
     </div>
   );
