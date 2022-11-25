@@ -30,7 +30,7 @@ npm dev
 
 This project use [vercel](https://vercel.com/) to deploy. It is very easy!
 
-[website](https://arnft-seven.vercel.app?id=15)
+[website](https://arnft-seven.vercel.app/nft/15)
 
 # BackEnd
 1. Use Koa framework to wirte web API
