@@ -2,8 +2,8 @@ import axios from "axios";
 import { Toast } from "antd-mobile";
 
 axios.defaults.timeout = 100000;
-// axios.defaults.baseURL = "https://asia-east2-test-35968.cloudfunctions.net/";
-axios.defaults.baseURL = "http://127.0.0.1:5001/test-35968/asia-east2/";
+axios.defaults.baseURL = "https://asia-east2-test-35968.cloudfunctions.net/";
+// axios.defaults.baseURL = "http://127.0.0.1:5001/test-35968/asia-east2/";
 
 axios.interceptors.request.use(
   (config) => {
