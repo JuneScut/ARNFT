@@ -181,8 +181,8 @@ export const buyNFT = functions
   .region("asia-east2")
   .https.onRequest(async (request, response) => {
     cors(request, response, async () => {
-      const { tokenId, etherValue } = request.body;
-      if (!tokenId) {
+      const { nftId, etherValue } = request.body;
+      if (!nftId) {
         response.send({
           code: RETURN_CODE.ERROR_PARAMS,
         });
@@ -195,9 +195,9 @@ export const buyNFT = functions
           console.log("auctionPrice=", auctionPrice.toString());
           const tx = await marketContract
             .connect(buyer)
-            .createMarketSale(nftContract.address, tokenId, {
+            .createMarketSale(nftContract.address, Number(nftId), {
               value: auctionPrice,
-              gasLimit: 3000004,
+              gasLimit: 3000008,
             });
           await tx.wait();
           response.send({
