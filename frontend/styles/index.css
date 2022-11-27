@@ -1,3 +1,6 @@
+:root:root {
+    --adm-color-primary: #000;
+  }
 
 body { margin: 0; color: #000; background: #fff; }
 .next-error-h1 {

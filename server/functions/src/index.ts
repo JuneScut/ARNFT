@@ -5,7 +5,7 @@ import {
   getMarketContract,
   getNFTContract,
   getRoles,
-  getUnsoldNFTs,
+  getAllNFTs,
 } from "./utils/tool";
 // import * as admin from "firebase-admin";
 
@@ -140,14 +140,14 @@ export const createMarketItem = functions
   });
 
 // TODO: 分页
-export const fetchMarketItems = functions
+export const fetchAllMarketItems = functions
   .region("asia-east2")
   .https.onRequest(async (request, response) => {
     cors(request, response, async () => {
-      const nfts = await getUnsoldNFTs();
+      const nfts = await getAllNFTs();
       response.send({
         code: RETURN_CODE.SUCCESS,
-        nfts,
+        data: nfts,
       });
     });
   });
@@ -163,7 +163,7 @@ export const getNFTMarketData = functions
           code: RETURN_CODE.ERROR_PARAMS,
         });
       } else {
-        const nfts = await getUnsoldNFTs();
+        const nfts = await getAllNFTs();
         const item = nfts.find((nft) => nft.tokenId == tokenId.toString());
         if (item) {
           item.price = ethers.utils.formatEther(item.price).toString();
@@ -185,6 +185,7 @@ export const buyNFT = functions
       if (!nftId) {
         response.send({
           code: RETURN_CODE.ERROR_PARAMS,
+          data: {},
         });
       } else {
         try {

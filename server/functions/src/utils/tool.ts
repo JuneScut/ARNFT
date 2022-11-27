@@ -43,14 +43,14 @@ export const getNFTContract = (signer: Wallet) => {
   return nftContract;
 };
 
-export const getUnsoldNFTs = async () => {
+export const getAllNFTs = async () => {
   const { signer } = getRoles();
   const nftContract = getNFTContract(signer);
   const marketContract = getMarketContract(signer);
 
-  let arrayItems = await marketContract.fetchMarketItems();
+  let arrayItems = await marketContract.fetchItemsCreated();
   const nfts = await Promise.all(
-    arrayItems.map(async (i: any) => {
+    arrayItems.map(async (i: any, idx: number) => {
       const tokenUri = await nftContract.tokenURI(i.tokenId);
       return {
         price: i.price.toString(),
@@ -58,6 +58,8 @@ export const getUnsoldNFTs = async () => {
         seller: i.seller,
         owner: i.owner,
         tokenUri,
+        sold: i.sold,
+        nftId: idx + 1,
       };
     })
   );

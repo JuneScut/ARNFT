@@ -1,32 +1,17 @@
 import React, { useEffect } from "react";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/router";
-import { buyNFT, getNFTData, getNFTMarketData } from "../../libs/server";
-import { Dialog, DotLoading } from "antd-mobile";
-
-const Loading = () => {
-  return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <img src="/loading.gif" style={{ width: "100%" }} />
-    </div>
-  );
-};
+import { buyNFT, getNFTMarketData } from "../../libs/server";
+import { Dialog, DotLoading, Space } from "antd-mobile";
+import { StorageKey } from "../../libs/constant";
+import Loading from "../../components/Loading";
+import { MarketItem } from "..";
 
 function NFT() {
   const [loading, setLoading] = useState<boolean>(true);
   const [tradingLoading, setTradingLoading] = useState<boolean>(false);
   // NFT info
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [url, setUrl] = useState<string>("");
-  const [ar, setAr] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  const [marketItem, setMarketItem] = useState<MarketItem>();
 
   const router = useRouter();
   const { id } = router.query;
@@ -35,15 +20,18 @@ function NFT() {
     if (id) {
       getNFTMarketData(id.toString()).then((res) => {
         if (res) {
-          const { price, tokenUri } = res;
+          const { price, tokenUri, nftId } = res;
           const data = JSON.parse(tokenUri);
-          const { name, description, url, ar } = data;
-          setName(name);
-          setDescription(description);
-          setUrl(url);
-          setAr(ar);
+          setMarketItem({
+            ...res,
+            content: data,
+          });
           setLoading(false);
-          setPrice(price);
+          try {
+            window.localStorage.setItem(StorageKey.NFTData, tokenUri);
+          } catch (e) {
+            // not enough storage
+          }
         } else {
           router.push("/404");
         }
@@ -56,16 +44,31 @@ function NFT() {
   }, [id]);
 
   const claimNFT = useCallback(async () => {
+    // router.push({
+    //   pathname: "/success",
+    //   query: {
+    //     tokenId: id,
+    //   },
+    // });
+    if (tradingLoading || !marketItem) {
+      return;
+    }
     Dialog.confirm({
       title: "Comfirmation",
-      content: `Are you sure to consume ${price} ether to claim this NFT?`,
+      content: `Are you sure to consume ${marketItem.price} ether to claim this NFT?`,
       cancelText: "Cancel",
       confirmText: "Confirm",
       onConfirm: async () => {
         if (id) {
           setTradingLoading(true);
-          buyNFT(id.toString(), price).then(
+          buyNFT(marketItem.nftId.toString(), marketItem.price).then(
             (res) => {
+              router.push({
+                pathname: "/success",
+                query: {
+                  tokenId: id,
+                },
+              });
               setTradingLoading(false);
             },
             (err) => {
@@ -75,28 +78,61 @@ function NFT() {
         }
       },
     });
-  }, [id, price]);
+  }, [marketItem, tradingLoading]);
+
+  const jumpToIndex = () => {
+    router.push("/");
+  };
+
+  const jumpToOwnNFTs = () => {
+    router.push("/own");
+  };
 
   return loading ? (
     <Loading />
   ) : (
     <div className="main">
-      <h3 className="title">{name}</h3>
-      <p>{description}</p>
+      <h3 className="title">{marketItem?.content.name}</h3>
+      <p>{marketItem?.content.description}</p>
       <div className="nft-model">
-        <a rel="ar" href={ar}>
-          <img src={url} />
+        <a rel="ar" href={marketItem?.content.ar}>
+          <img src={marketItem?.content.url} />
         </a>
       </div>
-      <div className="submit-btn">
-        <a onClick={claimNFT} className="submit">
-          {tradingLoading ? (
-            <DotLoading className="submit-content" color="white" />
-          ) : (
-            <div className="submit-content">Claim</div>
-          )}
-        </a>
+      {!marketItem?.sold && (
+        <div className="btn-wrapper">
+          <button className="learn-more" onClick={claimNFT}>
+            <span className="circle" aria-hidden="true">
+              <span className="icon arrow"></span>
+            </span>
+            {tradingLoading ? (
+              <DotLoading color="primary" style={{ display: "inline-block" }} />
+            ) : (
+              <span className="button-text">Claim </span>
+            )}
+          </button>
+        </div>
+      )}
+      <Space />
+      <div className="btn-wrapper">
+        <button className="learn-more" onClick={jumpToIndex}>
+          <span className="circle" aria-hidden="true">
+            <span className="icon arrow"></span>
+          </span>
+          <span className="button-text">Market</span>
+        </button>
       </div>
+      <Space />
+      {marketItem?.sold && (
+        <div className="btn-wrapper">
+          <button className="learn-more" onClick={jumpToOwnNFTs}>
+            <span className="circle" aria-hidden="true">
+              <span className="icon arrow"></span>
+            </span>
+            <span className="button-text">Own NFTs</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
