@@ -61,7 +61,7 @@ export default function Success() {
   };
 
   const MyOwnNFTs = () => {
-    console.log("MyOwnNFTs");
+    router.push("/own");
   };
 
   return (
