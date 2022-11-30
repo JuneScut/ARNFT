@@ -106,7 +106,7 @@ function NFT() {
               <span className="icon arrow"></span>
             </span>
             {tradingLoading ? (
-              <DotLoading color="primary" style={{ display: "inline-block" }} />
+              <span className="button-text">Waiting... </span>
             ) : (
               <span className="button-text">Claim </span>
             )}

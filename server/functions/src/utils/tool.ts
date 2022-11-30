@@ -1,24 +1,45 @@
 import { ethers, Wallet } from "ethers";
-import { ACCOUNT, BUYER, ContractAddress } from "../utils/constant";
+import { ContractAddress } from "../utils/constant";
 import * as arNFTJson from "../../assets/ARNFT.json";
 import * as marketJson from "../../assets/ARNftMarket.json";
+import * as admin from "firebase-admin";
 
-export const getRoles = () => {
-  let network = {
-    chainId: 8348,
-    name: "Etherdata",
-  };
-  const provider = new ethers.providers.JsonRpcProvider(
-    "https://rpc.debugchain.net",
-    network
-  );
-  const signer = new ethers.Wallet(ACCOUNT.PK, provider);
-  const buyer = new ethers.Wallet(BUYER.PK, provider);
-  return {
-    provider,
-    signer,
-    buyer,
-  };
+let network = {
+  chainId: 8348,
+  name: "Etherdata",
+};
+
+export const provider = new ethers.providers.JsonRpcProvider(
+  "https://rpc.debugchain.net",
+  network
+);
+
+export const getCreator = async () => {
+  const db = admin.firestore();
+  const creator = await db.collection("/users").doc("creator").get();
+  const data = creator.data();
+  if (!data) {
+    throw Error("No Creator!");
+  } else {
+    const pk = data.pk;
+    // const address = data.address;
+    const creator = new ethers.Wallet(pk, provider);
+    return creator;
+  }
+};
+
+export const getBuyer = async () => {
+  const db = admin.firestore();
+  const creator = await db.collection("/users").doc("buyer").get();
+  const data = creator.data();
+  if (!data) {
+    throw Error("No Buyer!");
+  } else {
+    const pk = data.pk;
+    // const address = data.address;
+    const creator = new ethers.Wallet(pk, provider);
+    return creator;
+  }
 };
 
 export const getMarketContract = (signer: Wallet) => {
@@ -44,11 +65,14 @@ export const getNFTContract = (signer: Wallet) => {
 };
 
 export const getAllNFTs = async () => {
-  const { signer } = getRoles();
-  const nftContract = getNFTContract(signer);
-  const marketContract = getMarketContract(signer);
-
+  const creator = await getCreator();
+  const nftContract = getNFTContract(creator);
+  const marketContract = getMarketContract(creator);
+  console.log(creator.address);
+  console.log(nftContract.address);
+  console.log(marketContract.address);
   let arrayItems = await marketContract.fetchItemsCreated();
+  console.log("4", arrayItems);
   const nfts = await Promise.all(
     arrayItems.map(async (i: any, idx: number) => {
       const tokenUri = await nftContract.tokenURI(i.tokenId);

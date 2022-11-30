@@ -4,21 +4,24 @@ import { RETURN_CODE } from "./utils/constant";
 import {
   getMarketContract,
   getNFTContract,
-  getRoles,
   getAllNFTs,
+  getCreator,
+  provider,
+  getBuyer,
 } from "./utils/tool";
-// import * as admin from "firebase-admin";
-
 import * as cross from "cors";
+import * as admin from "firebase-admin";
 
-// admin.initializeApp();
 const cors = cross({ origin: true });
+admin.initializeApp(functions.config().firebase);
 
 export const helloWorld = functions
   .region("asia-east2")
-  .https.onRequest((request, response) => {
+  .https.onRequest(async (request, response) => {
     functions.logger.info("Hello logs!", { structuredData: true });
-    response.send("Hello from Firebase, ellilachen!");
+    const creator = await getCreator();
+    console.log(creator.address);
+    response.send("Hello from Firebase, ellilachen!" + creator.address);
   });
 
 export const getBalance = functions
@@ -31,7 +34,6 @@ export const getBalance = functions
           code: RETURN_CODE.ERROR_PARAMS,
         });
       } else {
-        const { provider } = getRoles();
         const balance = await provider.getBalance(address.toString());
 
         response.send({
@@ -56,7 +58,7 @@ export const createNFT = functions
           code: RETURN_CODE.ERROR_PARAMS,
         });
       } else {
-        const { signer } = getRoles();
+        const signer = await getCreator();
         const marketContract = getMarketContract(signer);
         const nftContract = getNFTContract(signer);
         let listingPrice = await marketContract.getListingPrice();
@@ -91,7 +93,7 @@ export const getNFTData = functions
           code: RETURN_CODE.ERROR_PARAMS,
         });
       } else {
-        const { signer } = getRoles();
+        const signer = await getCreator();
         const nftContract = getNFTContract(signer);
 
         let data = await nftContract.tokenURI(BigNumber.from(tokenId));
@@ -114,9 +116,9 @@ export const createMarketItem = functions
           code: RETURN_CODE.ERROR_PARAMS,
         });
       } else {
-        const { signer } = getRoles();
-        const marketContract = getMarketContract(signer);
-        const nftContract = getNFTContract(signer);
+        const creator = await getCreator();
+        const marketContract = getMarketContract(creator);
+        const nftContract = getNFTContract(creator);
         let listingPrice = await marketContract.getListingPrice();
         const price = ethers.utils.parseUnits(etherValue.toString(), "ether"); // 转换成 wei
         console.log("listingPrice=", listingPrice.toString());
@@ -163,7 +165,9 @@ export const getNFTMarketData = functions
           code: RETURN_CODE.ERROR_PARAMS,
         });
       } else {
+        console.log("1111");
         const nfts = await getAllNFTs();
+        console.log("222", nfts);
         const item = nfts.find((nft) => nft.tokenId == tokenId.toString());
         if (item) {
           item.price = ethers.utils.formatEther(item.price).toString();
@@ -189,7 +193,7 @@ export const buyNFT = functions
         });
       } else {
         try {
-          const { buyer } = getRoles();
+          const buyer = await getBuyer();
           const marketContract = getMarketContract(buyer);
           const nftContract = getNFTContract(buyer);
           const auctionPrice = ethers.utils.parseUnits(etherValue, "ether");
@@ -219,7 +223,7 @@ export const getMyNFTs = functions
   .region("asia-east2")
   .https.onRequest(async (request, response) => {
     cors(request, response, async () => {
-      const { buyer } = getRoles();
+      const buyer = await getBuyer();
       const marketContract = getMarketContract(buyer);
       const nftContract = getNFTContract(buyer);
       let myNFTs = await marketContract.connect(buyer).fetchMyNFTs();
