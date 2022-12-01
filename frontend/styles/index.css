@@ -7,12 +7,13 @@ body { margin: 0; color: #000; background: #fff; }
 border-right: 1px solid rgba(0, 0, 0, .3);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
     body { color: #fff; background: #000; }
     .next-error-h1 {
         border-right: 1px solid rgba(255, 255, 255, .3);
     }
-}
+} */
+
 .main {
     padding: 1.2rem;
     position: relative;
