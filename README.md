@@ -58,10 +58,9 @@ local：http://127.0.0.1:5001/test-35968/asia-east2/getBalance?address=0x3d71519
 server: https://asia-east2-test-35968.cloudfunctions.net/getBalance?address=0x3d71519280e40f6ec003645c86761EF479040002
 
 ## Plans:
-- [ ] 数据存储
-- [ ] 用户身份处理
-- [ ] 和 ethereum 交互，将功能封装成接口
+- [x] 用户身份存储数据库
+- [x] 和 ethereum 交互，将功能封装成接口
   - [x] 将 NFT 发布到 Market
-  - [ ] 购买 NFT 报错！
+  - [x] 购买 NFT 
   - [x] 查询已购买
   - [x] 查询未销售
