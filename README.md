@@ -1,3 +1,7 @@
+# Quick view
+![quickview](./assets/introduction.gif)
+
+
 # Contract
 ## Framework
 1. Use HardHat to deploy and test Contract
